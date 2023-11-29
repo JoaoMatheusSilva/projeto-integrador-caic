@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\ZipCode;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ZipCode>
@@ -18,6 +19,7 @@ class ZipCodeFactory extends Factory
     {
         return [
             //
+            'place' => $this->faker->word(),
         ];
     }
 }

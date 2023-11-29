@@ -23,10 +23,14 @@ class UpdateStoreRequest extends FormRequest
     {
         return [
             //
-            'price' => 'required|numeric|min:0',
-            'isAvaliable' => 'required|boolean',
-            'store_id' => 'required|exists:stores,id',
-            'product_id' => 'required|exists:products,id',
+            'name' =>'required',
+            'contact' => 'nullable|string',
+            'email' => 'nullable|email|unique:stores,email',
+            'phone' => 'nullable|string',
+            'cnpj' => 'nullable|string',
+            'number' => 'nullable|string',
+            'complement' => 'nullable|string',
+            'zip_code_id' => 'required|exists:zip_codes,id',
         ];
     }
 }

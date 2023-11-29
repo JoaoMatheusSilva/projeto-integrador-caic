@@ -11,7 +11,7 @@ class StoreZipCodeRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class StoreZipCodeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'zipcode' => 'required|string',
+            'place' => 'required|string',
+            'city_id' => 'required|exists:cities,id',
+            'neighborhood_id' => 'required|exists:neighborhoods,id',
+
         ];
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Store;
 use App\Http\Requests\StoreStoreRequest;
 use App\Http\Requests\UpdateStoreRequest;
+use App\Models\ZipCode;
 use Inertia\Inertia;
 
 class StoreController extends Controller
@@ -14,10 +15,8 @@ class StoreController extends Controller
      */
     public function index()
     {
-        $stores = Store::all();
-
         return Inertia::render('Stores/Index', [
-           Store::with('user:id,name')->latest()->get(),
+            'stores' => Store::with(['user:id,name', 'zip-codes:id,place'])->latest()->get(),
         ]);
     }
 
@@ -26,7 +25,9 @@ class StoreController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Stores/Create');
+        return Inertia::render('Stores/Create',[
+            'zip_codes' => ZipCode::select('id', 'place as label')->orderBy('place')->get(),
+        ]);
     }
 
     /**
@@ -34,35 +35,37 @@ class StoreController extends Controller
      */
     public function store(StoreStoreRequest $request)
     {
-        $stores = $request->validated();
+        $validatedData = $request->validated();
 
-        $create = $request->user()->stores()->create($stores);
+        $create = $request->user()->stores()->create($validatedData );
 
-        if(!$create) {
+        if ($create) {
             return redirect()->route('stores.index');
         }
         return abort(500);
+
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
         return Inertia::render('Stores/Show', [
-            'stores' => Store::findOrFail($id),
+            'store' => Store::with('zip_codes')->findOrFail($id),
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
         return Inertia::render(
             'Stores/Edit',
             [
-                'stores' => Store::findOrFail($id),
+                'store' => Store::findOrFail($id),
+                'zip_codes' => ZipCode::select('id', 'place as label')->orderBy('place')->get(),
             ]
         );
     }
@@ -70,18 +73,13 @@ class StoreController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateStoreRequest $request, string $id)
+    public function update(UpdateStoreRequest $request, $id)
     {
-         // Encontra o post a ser atualizado
-         $stores = Store::findOrFail($id);
+        $store = Store::findOrFail($id);
 
-         $this->authorize('update', $stores);
-
-         // Valida os dados do formulário usando UpdatePostRequest
         $validatedData = $request->validated();
 
-        // Atualize outros campos com os dados validados
-        $stores->update($validatedData);
+        $store->update($validatedData);
 
         return redirect()->route('stores.index');
     }
@@ -89,14 +87,11 @@ class StoreController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        $stores = Store::findOrFail($id);
+        $store = Store::findOrFail($id);
 
-        $this->authorize('delete', $stores);
-
-        
-        $delete = $stores->delete();
+        $delete = $store->delete();
 
         if ($delete) {
             return redirect()->route('stores.index');

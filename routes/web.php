@@ -1,8 +1,26 @@
 <?php
 
+use App\Http\Controllers\AddressController;
+use App\Http\Controllers\BudgetController;
+use App\Http\Controllers\CityController;
+use App\Http\Controllers\EntityController;
+use App\Http\Controllers\NeighborhoodController;
 use App\Http\Controllers\PriceListController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductTypeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StateController;
 use App\Http\Controllers\StoreController;
+use App\Http\Controllers\ZipCodeController;
+use App\Models\Address;
+use App\Models\Budget;
+use App\Models\Entity;
+use App\Models\Neighborhood;
+use App\Models\PriceList;
+use App\Models\Product;
+use App\Models\ProductType;
+use App\Models\Store;
+use App\Models\ZipCode;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -37,12 +55,40 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::resource('posts', StoreController::class)
-    ->only(['index', 'create','edit','store', 'show', 'update', 'destroy'])
+Route::resource('states', StateController::class)
     ->middleware(['auth', 'verified']);
 
-Route::resource('posts', PriceListController::class)
-    ->only(['index', 'create','edit','store', 'show', 'update', 'destroy'])
+Route::resource('cities', CityController::class)
     ->middleware(['auth', 'verified']);
 
-require __DIR__.'/auth.php';
+Route::resource('neighborhoods', NeighborhoodController::class)
+    ->middleware(['auth', 'verified']);
+
+Route::resource('zip-codes', ZipCodeController::class)
+    ->middleware(['auth', 'verified']);
+
+    Route::get('/zip-codes/search', [ZipCodeController::class, 'search'])->middleware(['auth', 'verified'])->name('zip-codes.search');
+
+Route::resource('entities', EntityController::class)
+    ->middleware(['auth', 'verified']);
+
+Route::resource('addresses', AddressController::class)
+    ->middleware(['auth', 'verified']);
+
+
+Route::resource('stores', StoreController::class)
+    ->middleware(['auth', 'verified']);
+
+Route::resource('product-types', ProductTypeController::class)
+    ->middleware(['auth', 'verified']);
+
+Route::resource('products', ProductController::class)
+    ->middleware(['auth', 'verified']);
+
+Route::resource('price-lists', PriceListController::class)
+    ->middleware(['auth', 'verified']);
+
+Route::resource('budgets', BudgetController::class)
+    ->middleware(['auth', 'verified']);
+
+require __DIR__ . '/auth.php';

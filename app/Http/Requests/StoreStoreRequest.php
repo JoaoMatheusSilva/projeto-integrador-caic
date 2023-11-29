@@ -27,10 +27,10 @@ class StoreStoreRequest extends FormRequest
             'contact' => 'nullable|string',
             'email' => 'nullable|email|unique:stores,email',
             'phone' => 'nullable|string',
-            'cnpj' => 'nullable|string',
+            'cnpj' => 'required|string',
             'number' => 'nullable|string',
             'complement' => 'nullable|string',
-            'address_id'=> 'required|exists:addresses,id',
+            'zip_code_id' => 'required|exists:zip_codes,id',
         ];
     }
 }

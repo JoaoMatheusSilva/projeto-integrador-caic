@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('contact');
-            $table->email('email')->unique();
-            $table->string('phone');
-            $table->string('cnpj')->unique();
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('cnpj');
             $table->foreignId('address_id')->constrained('addresses');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }

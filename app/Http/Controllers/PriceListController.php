@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\PriceList;
+use App\Models\Store;
+use App\Models\Product;
 use App\Http\Requests\StorePriceListRequest;
 use App\Http\Requests\UpdatePriceListRequest;
 use Inertia\Inertia;
@@ -25,7 +27,10 @@ class PriceListController extends Controller
      */
     public function create()
     {
-        return Inertia::render('PriceLists/Create');
+        return Inertia::render('PriceLists/Create',[
+        'stores' => Store::select('id', 'name as label')->orderBy('name')->get(),
+        'products' => Product::select('id', 'name as label')->orderBy('name')->get(),
+        ]);
     }
 
     /**
@@ -50,6 +55,8 @@ class PriceListController extends Controller
     {
         return Inertia::render('PriceLists/Show', [
             'price-lists' => PriceList::findOrFail($id),
+            'stores' => Store::select('id', 'name as label')->orderBy('name')->get(),
+            'products' => Product::select('id', 'name as label')->orderBy('name')->get(),
         ]);
     }
 
@@ -62,6 +69,8 @@ class PriceListController extends Controller
             'PriceLists/Edit',
             [
                 'price-list' => PriceList::findOrFail($id),
+                'stores' => Store::select('id', 'name as label')->orderBy('name')->get(),
+            'products' => Product::select('id', 'name as label')->orderBy('name')->get(),
             ]
         );
     }

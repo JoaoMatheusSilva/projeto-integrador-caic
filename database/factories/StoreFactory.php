@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Address;
+use App\Models\ZipCode;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -26,8 +26,8 @@ class StoreFactory extends Factory
             'cnpj' => $this->faker->unique()->numerify('########'),
             'number' => $this->faker->numberBetween($int1 = 100, $int2 = 1000),
             'complement' => $this->faker->word(),
-            'address_id'  => function () {
-                return Address::factory()->create()->id;
+            'zip_code_id'  => function () {
+                return ZipCode::factory()->create()->id;
             },
         ];
     }
